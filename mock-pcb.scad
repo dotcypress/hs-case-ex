@@ -4,9 +4,9 @@ E = 0.001;
 
 // Reference board (remove * to show, n.b. it's a bit slow)
 *color("green")
-	translate([0, 0, 0])
-		scale([25.4, 25.4, 25.4])
-			import("hs-probe-pcb.stl");
+  translate([0, 0, 0])
+    scale([25.4, 25.4, 25.4])
+      import("hs-probe-pcb.stl");
 
 cube([40, 14, 1.6]);
 

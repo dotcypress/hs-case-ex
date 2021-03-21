@@ -52,101 +52,101 @@ $fn = 90;
 
 // Reference board (remove * to show, n.b. it's a bit slow)
 * color("green")
-	translate([0, 0, 2*E])
-		scale([25.4, 25.4, 25.4])
-			import("hs-probe-pcb.stl");
+  translate([0, 0, 2*E])
+    scale([25.4, 25.4, 25.4])
+      import("hs-probe-pcb.stl");
 
 // Case with solid endcap
 module solid_case() {
-	module exterior_perimeter(l) {
-		// Bottom
-		translate([0, 0, -(wall_t - corner_r)])
-			rotate(90, [0, 1, 0])
-				cylinder(r=corner_r, h=l + usb_o, $fn=4);
+  module exterior_perimeter(l) {
+    // Bottom
+    translate([0, 0, -(wall_t - corner_r)])
+      rotate(90, [0, 1, 0])
+        cylinder(r=corner_r, h=l + usb_o, $fn=4);
 
-		// Top			
-		translate([0, 0, board_t + part_h + (wall_t - corner_r)])
-			rotate(90, [0, 1, 0])
-				cylinder(r=corner_r, h=l + usb_o, $fn=4);
-	}
+    // Top      
+    translate([0, 0, board_t + part_h + (wall_t - corner_r)])
+      rotate(90, [0, 1, 0])
+        cylinder(r=corner_r, h=l + usb_o, $fn=4);
+  }
   
   // Text
   translate([14.5, board_w/2, board_t + part_h + wall_t - E])
     scale([0.6, 1, 1])
       linear_extrude(0.5)
         text("HS-P", font="Liberation Sans", valign="center");
-	
-	difference() {
-		// Case exterior
-		translate([-wall_t - allow_h, 0, 0]) hull() {
-			offset = wall_t - corner_r + prong_c;
-			
-			// Left main
-			translate([0, -offset, 0])
-				exterior_perimeter(board_l + wall_t + allow_h - board_c);
-			
-			// Right main
-			translate([0, board_w + offset, 0])
-				exterior_perimeter(board_l + wall_t + allow_h - board_c);
-			
-			// Left chamfer
-			translate([0, board_c - offset, 0])
-				exterior_perimeter(board_l + wall_t + allow_h);
-			
-			// Right chamfer
-			translate([0, board_w - board_c + offset, 0])
-				exterior_perimeter(board_l + wall_t + allow_h);
-		}
-		
-		// Space to cut out for board
-		union() {
-			// PCB and component space
-			hull() {
-				translate([-allow_h, -allow_h/2, 0])
-					cube([
-						board_l - board_c + allow_h,
-						board_w + allow_h,
-						board_t + part_h]);
-				
-			  translate([-allow_h, board_c - allow_h/2, 0])
-					cube([
-						board_l + allow_h,
-						board_w - board_c*2 + allow_h,
-						board_t + part_h]);
-			}
-			
-			// Endcap prong cutout
-			translate([0, -(prong_w - board_e), board_t + E])
-				cube([
-					prong_l + 1,
-					board_w + 2*(prong_w - board_e),
-					part_h]);
-			
-			// Cutout below PCB for better sliding
-			/*translate([-allow_h, board_c, -0.25])
-				cube([
-					board_l + allow_h,
-					board_w - board_c*2 + allow_h,
-					0.25]);*/
+  
+  difference() {
+    // Case exterior
+    translate([-wall_t - allow_h, 0, 0]) hull() {
+      offset = wall_t - corner_r + prong_c;
+      
+      // Left main
+      translate([0, -offset, 0])
+        exterior_perimeter(board_l + wall_t + allow_h - board_c);
+      
+      // Right main
+      translate([0, board_w + offset, 0])
+        exterior_perimeter(board_l + wall_t + allow_h - board_c);
+      
+      // Left chamfer
+      translate([0, board_c - offset, 0])
+        exterior_perimeter(board_l + wall_t + allow_h);
+      
+      // Right chamfer
+      translate([0, board_w - board_c + offset, 0])
+        exterior_perimeter(board_l + wall_t + allow_h);
+    }
+    
+    // Space to cut out for board
+    union() {
+      // PCB and component space
+      hull() {
+        translate([-allow_h, -allow_h/2, 0])
+          cube([
+            board_l - board_c + allow_h,
+            board_w + allow_h,
+            board_t + part_h]);
+        
+        translate([-allow_h, board_c - allow_h/2, 0])
+          cube([
+            board_l + allow_h,
+            board_w - board_c*2 + allow_h,
+            board_t + part_h]);
+      }
+      
+      // Endcap prong cutout
+      translate([0, -(prong_w - board_e), board_t + E])
+        cube([
+          prong_l + 1,
+          board_w + 2*(prong_w - board_e),
+          part_h]);
+      
+      // Cutout below PCB for better sliding
+      /*translate([-allow_h, board_c, -0.25])
+        cube([
+          board_l + allow_h,
+          board_w - board_c*2 + allow_h,
+          0.25]);*/
 
-			// USB connector
-			
+      // USB connector
+      
       translate([board_l - 10, (board_w - usb_w)/2, board_t + 1.8 - usb_h/2])
         cube([20, usb_w, usb_h]);
       
       /*translate([board_l - 10, 0, board_t + usb_h/2])
-				hull() {
-					translate([0, board_w/2 - (usb_w/2 - usb_h/2), 0])
-						rotate(90, [0, 1, 0])
-							cylinder(d=usb_h + usb_a, h=20, $fn=45);
-					
-					translate([0, board_w/2 + (usb_w/2 - usb_h/2), 0])
-						rotate(90, [0, 1, 0])
-							cylinder(d=usb_h + usb_a, h=20, $fn=45);
-				}*/
-			
-			// Debug connector
-			dbg_cutout();
+        hull() {
+          translate([0, board_w/2 - (usb_w/2 - usb_h/2), 0])
+            rotate(90, [0, 1, 0])
+              cylinder(d=usb_h + usb_a, h=20, $fn=45);
+          
+          translate([0, board_w/2 + (usb_w/2 - usb_h/2), 0])
+            rotate(90, [0, 1, 0])
+              cylinder(d=usb_h + usb_a, h=20, $fn=45);
+        }*/
+      
+      // Debug connector
+      dbg_cutout();
       
       if (enable_led_cutout) {
         // LED cutout
@@ -157,41 +157,41 @@ module solid_case() {
         translate([led_x - led_s/2, -prong_c, board_t - E])
           cube([led_s, board_w + prong_c*2, part_h + wall_t/2]);
       }
-		}
-	}
+    }
+  }
 }
 
 // Debug connector cutout
 module dbg_cutout() {
-	translate([dbg_x - (dbg_l/2), dbg_y - (dbg_w/2), board_t + dbg_h + E])
-		cube([dbg_l, dbg_w, 20]);
+  translate([dbg_x - (dbg_l/2), dbg_y - (dbg_w/2), board_t + dbg_h + E])
+    cube([dbg_l, dbg_w, 20]);
 }
 
 // Volume that defines part of solid_case to cut off for endcap
 module endcap_cut() {
-	translate([dbg_x + (dbg_l/2) - L - E, -L/2, board_t])
-		cube([L, L, L]);
+  translate([dbg_x + (dbg_l/2) - L - E, -L/2, board_t])
+    cube([L, L, L]);
 }
 
 module endcap() {
-	// Cut off part of solid case for endcap
-	intersection() {
-		solid_case();
-		translate([-0.2, 0, 0]) endcap_cut();
-	}
-		
-	// Locking prongs	
-	difference() {
-		union() {
-			translate([-wall_t - E, board_e - prong_w, board_t])
-				cube([prong_l + wall_t, prong_w, part_h + prong_adjust]);
-			
-			translate([-wall_t - E, board_w - board_e, board_t])
-				cube([prong_l + wall_t, prong_w, part_h + prong_adjust]);
-		}
-		
-		dbg_cutout();
-	}
+  // Cut off part of solid case for endcap
+  intersection() {
+    solid_case();
+    translate([-0.2, 0, 0]) endcap_cut();
+  }
+    
+  // Locking prongs  
+  difference() {
+    union() {
+      translate([-wall_t - E, board_e - prong_w, board_t])
+        cube([prong_l + wall_t, prong_w, part_h + prong_adjust]);
+      
+      translate([-wall_t - E, board_w - board_e, board_t])
+        cube([prong_l + wall_t, prong_w, part_h + prong_adjust]);
+    }
+    
+    dbg_cutout();
+  }
   
   // End reinforcement
   translate([-(wall_t + allow_h), -(wall_t + prong_c), board_t + 1.6])
@@ -199,32 +199,32 @@ module endcap() {
 }
 
 module case() {
-	// Remove endcap from solid case
-	difference() {
-		solid_case();
-		endcap_cut();
-	}
+  // Remove endcap from solid case
+  difference() {
+    solid_case();
+    endcap_cut();
+  }
 }
 
 module view_assembled() {
-	case();
-	translate([0, 0, 0.2]) endcap();
+  case();
+  translate([0, 0, 0.2]) endcap();
 }
 
 module view_print() {
-	translate([0, 0, wall_t]) {
-		case();
-		
-		translate([0, -(case_w + 2), -(board_t + wall_t)])
-			endcap();
-	}
+  translate([0, 0, wall_t]) {
+    case();
+    
+    translate([0, -(case_w + 2), -(board_t + wall_t)])
+      endcap();
+  }
 }
 
 module view_cross_section(h) {
-	difference() {
-		case();
-		translate([-L/2, -L/2, h]) cube([L, L, L]);
-	}
+  difference() {
+    case();
+    translate([-L/2, -L/2, h]) cube([L, L, L]);
+  }
 }
 
 view_print();
