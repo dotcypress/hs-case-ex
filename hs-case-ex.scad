@@ -14,7 +14,7 @@ board_c = 2.5; // chamfer distance from edge
 board_e = 0.6; // distance from board top edge to closest component (includes allowance)
 
 // Debug connector dimensions
-dbg_h = 3; // height of base
+dbg_h = 3 - 0.4; // height of base
 dbg_l = 6; // length of cutout
 dbg_w = 30; // width of cutout
 dbg_x = 4.3; // center X
