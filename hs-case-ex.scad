@@ -2,7 +2,7 @@
 
 // Adjust to account for printer accuracy
 allow_h = 0.4; // total horizontal allowance for PCB fit
-prong_adjust = -0.2; // adjust prong height by this value for friction fit
+prong_adjust = -0.3; // adjust prong height by this value for friction fit
 
 enable_led_cutout = true; // disable if not needed
 
@@ -31,7 +31,7 @@ led_x = 10.5; // center X
 led_y = 12.5; // center Y
 led_s = 1.6; // cutout size
 
-part_h = usb_h + 1.4; // height of tallest part on board (includes allowance for droop)
+part_h = usb_h + 1; // height of tallest part on board (includes allowance for droop)
 
 // Case dimensions
 wall_t = 1.5; // general wall thickness
@@ -73,7 +73,7 @@ module solid_case() {
   // Text
   translate([14.5, board_w/2, board_t + part_h + wall_t - E])
     scale([0.6, 1, 1])
-      linear_extrude(0.8)
+      linear_extrude(0.5)
         text("HS-P", font="Liberation Sans", valign="center");
 	
 	difference() {
